@@ -1,0 +1,282 @@
+import React, { useState } from "react";
+import Head from "next/head";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Heart,
+  ChevronDown,
+  Menu,
+  BookOpen,
+  Volume2,
+  VolumeX,
+  Bell
+} from "lucide-react";
+
+const COUNTDOWN_DATA = [
+  {
+    day: 10,
+    title: "You Are Deeply Loved",
+    verse: "Jeremiah 31:3",
+    scripture: "“I have loved you with an everlasting love.”",
+    note: "Just a reminder before your birthday countdown really begins: you are loved beyond human understanding.",
+    icon: <Heart className="w-5 h-5" />
+  },
+  {
+    day: 9,
+    title: "Grace Covers You",
+    verse: "2 Corinthians 12:9",
+    scripture: "“My grace is sufficient for you.”",
+    note: "May you never feel like you have to earn the love God already gives freely.",
+    icon: <div className="text-xl">✨</div>
+  },
+  {
+    day: 8,
+    title: "You Were Created Intentionally",
+    verse: "Psalm 139:14",
+    scripture: "“You are fearfully and wonderfully made.”",
+    note: "Nothing about you is accidental — not your heart, your mind, your softness, or your strength.",
+    icon: <div className="text-xl">🌸</div>
+  },
+  {
+    day: 7,
+    title: "God Has Good Plans For You",
+    verse: "Jeremiah 29:11",
+    scripture: "“For I know the plans I have for you…”",
+    note: "Even the seasons that confuse you are still part of something beautiful.",
+    icon: <div className="text-xl">☀️</div>
+  },
+  {
+    day: 6,
+    title: "You Don’t Walk Alone",
+    verse: "Deuteronomy 31:6",
+    scripture: "“The Lord your God goes with you.”",
+    note: "On your hardest days, may you always remember heaven hasn’t left your side.",
+    icon: <div className="text-xl">👥</div>
+  },
+  {
+    day: 5,
+    title: "Peace Will Find You",
+    verse: "Philippians 4:7",
+    scripture: "“The peace of God… will guard your hearts.”",
+    note: "I pray this new year of your life carries less anxiety and more peace.",
+    icon: <div className="text-xl">🕊️</div>
+  },
+  {
+    day: 4,
+    title: "Your Strength Will Be Renewed",
+    verse: "Isaiah 40:31",
+    scripture: "“Those who hope in the Lord will renew their strength.”",
+    note: "You’ve survived every difficult chapter so far. That strength is not ordinary.",
+    icon: <div className="text-xl">💪</div>,
+    locked: true
+  },
+  {
+    day: 3,
+    title: "You Are a Blessing",
+    verse: "Genesis 12:2",
+    scripture: "“You will be a blessing.”",
+    note: "The way you exist in people’s lives matters more than you know.",
+    icon: <div className="text-xl">🎁</div>,
+    locked: true
+  },
+  {
+    day: 2,
+    title: "Joy Is Coming",
+    verse: "Psalm 30:5",
+    scripture: "“Weeping may endure for a night, but joy comes in the morning.”",
+    note: "I hope this next year brings laughter that feels healing.",
+    icon: <div className="text-xl">☀️</div>,
+    locked: true
+  },
+  {
+    day: 1,
+    title: "Celebrate the Gift of You",
+    verse: "James 1:17",
+    scripture: "“Every good and perfect gift is from above.”",
+    note: "And one of those gifts is you. Happy Birthday ❤️",
+    icon: <div className="text-xl">🎉</div>,
+    notify: true
+  }
+];
+
+const GlassCard = ({ children, onClick, className = "", isLocked = false }) => (
+  <motion.div
+    whileTap={!isLocked ? { scale: 0.98 } : {}}
+    onClick={onClick}
+    className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl transition-all duration-500 ${className} ${
+      isLocked ? "opacity-60 grayscale cursor-not-allowed" : "cursor-pointer hover:bg-white/10"
+    }`}
+  >
+    {children}
+  </motion.div>
+);
+
+const DayCard = ({ data }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="w-full mb-6 px-4">
+      <GlassCard onClick={() => !data.locked && setIsOpen(!isOpen)} isLocked={data.locked} className="p-6">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-xs uppercase tracking-widest text-primary/80 font-medium">
+            Day {data.day < 10 ? `0${data.day}` : data.day}
+          </span>
+          <div className="text-primary/60">{data.icon}</div>
+        </div>
+
+        <h3 className="text-2xl font-serif text-text mb-2 italic">{data.title}</h3>
+
+        {data.locked ? (
+          <div className="flex flex-col items-center py-4 space-y-2">
+            <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+              <span className="text-sm">🔒</span>
+            </div>
+            <p className="text-sm text-text/40">Unlocks soon</p>
+          </div>
+        ) : data.notify ? (
+          <div className="mt-4">
+            <p className="text-sm text-text/70 italic mb-6">
+              "Waiting for the most beautiful soul to celebrate another year of life. The best is yet to come."
+            </p>
+            <button className="w-full py-4 bg-primary text-background rounded-full font-medium flex items-center justify-center gap-2 active:scale-95 transition-transform">
+              <Bell className="w-4 h-4" /> Notify Me
+            </button>
+          </div>
+        ) : (
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="overflow-hidden"
+              >
+                <div className="pt-4 border-t border-white/5 mt-4">
+                  <p className="text-primary font-serif italic text-lg mb-2">{data.scripture}</p>
+                  <p className="text-xs text-primary/60 uppercase tracking-wider mb-4">— {data.verse}</p>
+                  <p className="text-text/80 leading-relaxed font-serif">{data.note}</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
+      </GlassCard>
+    </div>
+  );
+};
+
+export default function BirthdayApp() {
+  const [isMuted, setIsMuted] = useState(true);
+
+  return (
+    <div className="min-h-screen bg-[#141316] text-[#F8F5F0] selection:bg-primary/30 font-sans overflow-x-hidden">
+      <Head>
+        <title>A Sacred Journey | 10 Days to 20th May</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+      </Head>
+
+      <nav className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 py-6 backdrop-blur-sm bg-gradient-to-b from-background/40 to-transparent">
+        <Menu className="w-6 h-6 text-text/80" />
+        <h1 className="text-xl font-serif italic tracking-wide">A Sacred Journey</h1>
+        <Heart className="w-6 h-6 text-primary" fill="currentColor" />
+      </nav>
+
+      <section className="relative h-screen flex flex-col justify-center items-center text-center px-8">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1280"
+            alt="Hero Background"
+            className="w-full h-full object-cover opacity-50 grayscale-[0.2]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/60 to-background" />
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.5 }}
+          className="z-10 max-w-md"
+        >
+          <h2 className="text-5xl md:text-6xl font-serif mb-6 leading-tight italic">
+            10 Days to <br /> 20th May
+          </h2>
+          <p className="text-lg text-text/80 leading-relaxed font-serif italic px-4">
+            “To my babe, you probably have no idea just how amazing you are. But even if you know, I’m here to tell
+            you again xo.”
+          </p>
+          <motion.div
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            className="mt-12 flex justify-center"
+          >
+            <ChevronDown className="w-8 h-8 text-primary/60" />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      <main className="relative z-10 max-w-lg mx-auto pb-24">
+        {COUNTDOWN_DATA.map((day) => (
+          <DayCard key={day.day} data={day} />
+        ))}
+
+        <section className="mt-20 px-6 text-center space-y-12">
+          <div className="space-y-6">
+            <p className="text-lg leading-relaxed font-serif text-text/90 italic">
+              "Thank you for being so many things to me; consultant, entertainer, therapist, supporter, sponsor,
+              motivator, audience, teacher... I can go on and on my babe but you&apos;ve tried for me, God bless you
+              always."
+            </p>
+            <p className="text-primary font-serif italic text-xl">-Your babe ( me of course )</p>
+          </div>
+
+          <div className="flex justify-center space-x-2 pb-12">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+            <div className="w-1.5 h-1.5 rounded-full bg-accent/40" />
+            <div className="w-1.5 h-1.5 rounded-full bg-primary/20" />
+          </div>
+        </section>
+      </main>
+
+      <div className="fixed bottom-0 left-0 w-full z-50 px-6 pb-8 pointer-events-none">
+        <div className="max-w-md mx-auto pointer-events-auto">
+          <GlassCard className="flex justify-around items-center py-4 px-2 rounded-full border-white/5 bg-surface/80">
+            <button className="p-3 bg-primary/20 text-primary rounded-full">
+              <BookOpen className="w-5 h-5" />
+            </button>
+            <button className="p-3 text-text/40 hover:text-primary transition-colors">
+              <Heart className="w-5 h-5" />
+            </button>
+            <button onClick={() => setIsMuted(!isMuted)} className="p-3 text-text/40 hover:text-primary transition-colors">
+              {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+            </button>
+          </GlassCard>
+        </div>
+      </div>
+
+      <footer className="text-center pb-24 text-[10px] tracking-[0.2em] text-text/30 uppercase font-medium">
+        20th May • Happy 24th
+      </footer>
+
+      <style jsx global>{`
+        @import url("https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap");
+
+        :root {
+          --font-serif: "EB Garamond", serif;
+          --font-sans: "Inter", sans-serif;
+        }
+
+        body {
+          background-color: #141316;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        .font-serif {
+          font-family: var(--font-serif);
+        }
+        .font-sans {
+          font-family: var(--font-sans);
+        }
+      `}</style>
+    </div>
+  );
+}
