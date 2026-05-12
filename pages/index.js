@@ -183,11 +183,7 @@ export default function BirthdayApp() {
 
       <section className="relative h-screen flex flex-col justify-center items-center text-center px-8">
         <div className="absolute inset-0 z-0">
-          <img
-            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=1280"
-            alt="Hero Background"
-            className="w-full h-full object-cover opacity-50 grayscale-[0.2]"
-          />
+          <img src="/IMG_2042.JPG" alt="Hero Background" className="w-full h-full object-cover opacity-50 grayscale-[0.2]" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/60 to-background" />
         </div>
 
